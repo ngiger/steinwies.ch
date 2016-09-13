@@ -1,0 +1,20 @@
+<Directory /var/www/steinwies.ch/doc>
+  Options ExecCGI
+  AllowOverride None
+  Order allow,deny
+  Allow from all
+</Directory>
+
+<VirtualHost *:80>
+  ServerName 127.0.0.1
+  DocumentRoot /var/www/davaz.com/doc
+  DirectoryIndex index.html index.rbx
+  SetHandler ruby-object
+  RubyAddPath /var/www/steinwies.ch/vendor/ruby/2.3.0/gems/rclconf-1.0.0/lib
+  RubyAddPath /var/www/steinwies.ch/vendor/ruby/2.3.0/gems/sbsm-1.3.0/lib
+  RubyAddPath /var/www/steinwies.ch/src
+  RubyRequire 'util/trans_handler.steinwies'
+  RubyTransHandler Steinwies::TransHandler.instance
+  ErrorLog  "|/usr/sbin/cronolog -l /var/www/steinwies.ch/log/error_log  /var/www/steinwies.ch/log/%Y/%m/%d/error_log"
+  CustomLog "|/usr/sbin/cronolog -l /var/www/steinwies.ch/log/access_log /var/www/steinwies.ch/log/%Y/%m/%d/access_log" combined
+</VirtualHost>
