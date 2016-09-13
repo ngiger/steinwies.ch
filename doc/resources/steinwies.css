@@ -1,0 +1,185 @@
+body {
+
+	background-image : url(/resources/steinwies_bg.jpg);
+	background-repeat : no-repeat;
+	background-position : top center;
+	background-attachment : fixed;
+	background-color : #ffffff;
+	font-family : Arial, Helvetica, sans-serif;
+	font-size : 14px;
+	color : black;
+	text-decoration :none;
+}
+
+IMG {
+  vertical-align : top;
+  border-style : none;
+}
+
+.nav {
+	
+	font-size : 17px;
+	font-weight : bold;
+	background : #cccccc;
+	text-decoration :none;
+	padding : 3px;
+
+}
+
+
+.template {
+
+text-align : center;
+
+}
+
+a {
+
+	text-decoration : none;
+	color : blue;
+	
+}
+
+a:hover {
+
+	color : #ac854c;
+
+}
+td.mailto {
+  padding-top: 6px;
+}
+a.mailto	{
+
+	color : black;
+	font-weight : bold;
+	font-size : 18px;
+	text-decoration : none;
+
+}
+
+a.mailto:hover	{
+
+	font-weight : bold;
+	font-size : 18px;
+	text-decoration : none;
+	color : blue;
+
+}
+
+table {
+
+	padding : 6px;
+}
+
+table.template{
+
+	width : 800px;
+	margin-left : auto;
+	margin-right : auto;
+	text-align : left;
+	padding : 2px;
+
+}
+
+td {
+	vertical-align : top;
+}
+
+td.title	{
+
+	font-weight :	bold;
+	font-size : 20px;
+	padding : 4px;
+
+}
+
+
+td.subtitle {
+	
+	font-weight : bold;
+	font-size : 15px;
+  padding-top: 10px;
+
+}
+td.sub-padding {
+	
+	font-weight : bold;
+	font-size : 15px;
+	padding : 4px;
+
+}
+
+td.italic {
+	font-style : italic;
+	padding : 4px;
+}
+td.reg {
+	width : 30%;
+	padding : 4px;
+}
+td.telnu	{
+	width : 30%;
+	padding :4px;
+	text-align : right;
+}
+
+a.nav	{
+
+	background : #cccccc;
+	color : #ac854c;
+
+}
+
+a.nav:link, a.nav:visited {
+	color : black;
+	background : #cccccc;
+	
+}
+
+a.nav:hover	{
+
+	background : #cccccc;
+	color : #ac854c;
+
+}
+
+
+textarea	{
+
+  font : 13px Arial, Helvetica, sans-serif; 
+	color : black;
+	vertical-align : top;
+	width : 400px;
+	height : 300px;
+	padding : 3px;
+}
+
+input{
+
+	padding	: 3px;
+
+}
+
+input.anzahl	{
+
+	width	:	35px;
+	padding : 3px;
+	
+}
+
+.error {
+
+	color : red;
+
+}
+
+h2 {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px 0px 2px;
+  margin: 0px;
+}
+ul {
+  padding: 0px;
+  margin: 0px 18px;
+}
