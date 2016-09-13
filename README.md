@@ -38,6 +38,8 @@ Use sample files in `etc` directory.
 % cp etc/steinwies.ch.conf.sample /etc/apache2/vhosts.d/steinwies.ch.conf
 ```
 
+And then, boot application server as `bundle exec ./bin/steinwies`.
+
 ## Test
 
 ### Dependencies
