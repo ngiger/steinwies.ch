@@ -5,3 +5,6 @@
 
 /etc/*.yml
 !/etc/trans_handler.yml
+
+/env
+/node_modules

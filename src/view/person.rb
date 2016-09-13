@@ -3,6 +3,7 @@
 require 'htmlgrid/component'
 require 'htmlgrid/text'
 require 'htmlgrid/image'
+require 'htmlgrid/div'
 require 'util/lookandfeel'
 require 'view/template'
 
@@ -50,14 +51,11 @@ module Steinwies
       [0, 4] => :portrait,
     }
     CSS_MAP = {
-      [0, 0] => 'mailto',
-    }
-    COMPONENT_CSS_MAP = {
-      [0, 0] => 'mailto',
+      [0, 0] => 'title',
     }
     SYMBOL_MAP = {
-      :portrait        =>  HtmlGrid::Image,
-      :schildpers_main => HtmlGrid::Link,
+      :portrait        => HtmlGrid::Image,
+      :schildpers_main => HtmlGrid::Text,
     }
   end
 

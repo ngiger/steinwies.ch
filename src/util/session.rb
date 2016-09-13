@@ -9,7 +9,7 @@ module Steinwies
   class Session < SBSM::Session
     SERVER_NAME      = Steinwies.config.server_name
     DEFAULT_LANGUAGE = 'de'
-    DEFAULT_STATE    = InitState
+    DEFAULT_STATE    = HomeState
     LOOKANDFEEL      = Lookandfeel
 
     def initialize(key, app, validator=Validator.new)

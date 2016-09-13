@@ -1,10 +1,10 @@
-# InitState -- Steinwies -- 03.12.2002 -- hwyss@ywesee.com
+# HomeState -- Steinwies -- 03.12.2002 -- hwyss@ywesee.com
 
 require 'state/global_predefine'
 require 'view/home'
 
 module Steinwies
-  class InitState < GlobalState
+  class HomeState < GlobalState
     DIRECT_EVENT = :home
     VIEW         = Home
   end
