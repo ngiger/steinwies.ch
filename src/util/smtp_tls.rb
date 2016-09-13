@@ -1,16 +1,17 @@
-require "openssl"
-require "net/smtp"
+require 'openssl'
+require 'net/smtp'
 
 Net::SMTP.class_eval do
   private
+
   def do_start(helodomain, user, secret, authtype)
     raise IOError, 'SMTP session already started' if @started
     check_auth_args user, secret, authtype if user or secret
 
     sock = timeout(@open_timeout) { TCPSocket.open(@address, @port) }
     @socket = Net::InternetMessageIO.new(sock)
-    @socket.read_timeout = 60 #@read_timeout
-    @socket.debug_output = STDERR #@debug_output
+    @socket.read_timeout = 60
+    @socket.debug_output = STDERR
 
     check_response(critical { recv_response() })
     do_helo(helodomain)
@@ -21,8 +22,8 @@ Net::SMTP.class_eval do
     ssl.sync_close = true
     ssl.connect
     @socket = Net::InternetMessageIO.new(ssl)
-    @socket.read_timeout = 60 #@read_timeout
-    @socket.debug_output = STDERR #@debug_output
+    @socket.read_timeout = 60
+    @socket.debug_output = STDERR
     do_helo(helodomain)
 
     authenticate user, secret, authtype if user

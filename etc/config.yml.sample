@@ -1,0 +1,12 @@
+---
+server_name: steinwies.ch
+mailer:
+  from: '"Steinwies" <steinwies@example.org>'
+  to:
+    - steinwies@example.org
+  server:
+  domain: example.org
+  port: 587
+  auth: plain
+  user: steinwies@example.org
+  pass:
