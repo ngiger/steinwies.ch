@@ -59,14 +59,14 @@ module Steinwies
     end
 
     def do_sendmail
-      smtp = Net::SMTP.new(Steinwies.config[:mailer][:server])
+      smtp = Net::SMTP.new(Steinwies.config.mailer['server'])
       smtp.start(
-        Steinwies.config[:mailer][:domain],
-        Steinwies.config[:mailer][:user],
-        Steinwies.config[:mailer][:pass],
-        Steinwies.config[:mailer][:auth]
+        Steinwies.config.mailer['domain'],
+        Steinwies.config.mailer['user'],
+        Steinwies.config.mailer['pass'],
+        Steinwies.config.mailer['auth']
       )
-      smtp.ready(@email, Steinwies.config[:mailer][:to]) {  |a|
+      smtp.ready(@email, Steinwies.config.mailer['to']) {  |a|
         a.write("Content-Type: text/plain; charset='UTF-8'\n")
         a.write("Subject: Email von Deiner Webseite.\n")
         a.write("\n")
