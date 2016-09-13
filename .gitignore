@@ -1,3 +1,7 @@
 /webalizer*
 /svc/*
 /log/*
+/.bundle
+
+/etc/*.yml
+!/etc/trans_handler.yml
