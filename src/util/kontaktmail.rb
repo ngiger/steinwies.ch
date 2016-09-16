@@ -41,7 +41,7 @@ module Steinwies
       body << 'Ort:'.ljust(width) + @ort
       body << 'Telefon:'.ljust(width) + @telefon
       body << 'Bestellung Dissertion:'.ljust(width) + @bestell_diss
-      body << 'Bestellung P&auml;diatrie:'.ljust(width) + @bestell_pedi
+      body << 'Bestellung Pädiatrie:'.ljust(width) + @bestell_pedi
       body << 'Ihre Mitteilung:'.ljust(width) + @text
       body.join("\n")
     end
