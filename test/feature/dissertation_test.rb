@@ -1,15 +1,15 @@
 require 'test_helper'
 
-# /de/dissertation
+# /de/page/dissertation
 class DissertationTest < Minitest::Test
   include Steinwies::TestCase
 
   def setup
-    browser.visit('/de/dissertation')
+    browser.visit('/de/page/dissertation')
   end
 
   def test_page_has_flyer_links
-    assert_match('/de/dissertation', browser.url)
+    assert_match('/de/page/dissertation', browser.url)
 
     link = wait_until { browser.a(href: '/resources/pdf/3FlyerMM.pdf') }
     assert_equal("Flyer\n(Pdf, 46 Kb)", link.text)

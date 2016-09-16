@@ -1,11 +1,11 @@
 require 'test_helper'
 
-# /de/home
+# /de/page/home
 class HomeTest < Minitest::Test
   include Steinwies::TestCase
 
   def setup
-    browser.visit('/de/home')
+    browser.visit('/de/page/home')
   end
 
   def test_page_has_address_as_title
@@ -14,7 +14,7 @@ class HomeTest < Minitest::Test
   end
 
   def test_page_has_valid_email_links
-    assert_match('/de/home', browser.url)
+    assert_match('/de/page/home', browser.url)
 
     link = wait_until { browser.a(href: 'mailto:thea.altherr@bluewin.ch') }
     assert(link.exists?)
