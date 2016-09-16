@@ -210,19 +210,19 @@ module Steinwies
       collect_resource([self::class::RESOURCE_BASE], rname, rstr)
     end
 
-    # does not use zone
-    def base_url(_=nil)
+    def base_url
       [
         @session.http_protocol + ':/',
         @session.server_name,
         @language,
+        # pseudo zone
+        @session.zone
       ].compact.join('/')
     end
 
-    # does not use zone
     def event_url(_=nil, event=:home, args={})
       args = Array(args).collect { |*pair| pair }.flatten
-      [base_url(nil), event, args].compact.join('/')
+      [base_url, event, args].compact.join('/')
     end
   end
 end

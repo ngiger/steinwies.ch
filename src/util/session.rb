@@ -10,6 +10,7 @@ module Steinwies
     SERVER_NAME      = Steinwies.config.server_name
     DEFAULT_LANGUAGE = 'de'
     DEFAULT_STATE    = HomeState
+    DEFAULT_ZONE     = 'page'
     LOOKANDFEEL      = Lookandfeel
 
     def initialize(key, app, validator=Validator.new)
@@ -22,8 +23,9 @@ module Steinwies
     end
 
     def zone
-      # steinwies does not use zone
-      nil
+      # steinwies does not use `actual` zone
+      # see also trans_handler.steinwies.rb
+      DEFAULT_ZONE
     end
   end
 end
