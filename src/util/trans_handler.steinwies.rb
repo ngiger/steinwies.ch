@@ -8,9 +8,9 @@ module Steinwies
     # SBSM::TransHandler's default simple_parse method expects
     # following uri:
     #     /language/flavor/event/key/value/key/value/...
-    # steinwies.ch does not use flavor and zone, but it has event without key
+    # steinwies.ch does not use flavor, but it has zone without key
     # like this:
-    #     /language/event/key/value/key/value/...
+    #     /language/[ZONE]/event/key/value/key/value/...
     #
     # This method provides support for this old uri format, wich
     # was implemented as 'zone_uri' grammer by using rockit.
@@ -20,6 +20,11 @@ module Steinwies
       values = {}
       lang = items.shift
       values.store(:language, lang) if lang
+      # NOTE:
+      #   steinwies.ch does not have actually `zone`.
+      #   But other applications need zone. Therefore steinwies.ch also use
+      #   pseuedo `zone`.
+      values.store(:zone, zone) if zone
       event = items.shift
       values.store(:event, event) if event
       until items.empty?
