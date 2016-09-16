@@ -24,6 +24,7 @@ module Steinwies
       #   steinwies.ch does not have actually `zone`.
       #   But other applications need zone. Therefore steinwies.ch also use
       #   pseuedo `zone`.
+      zone = items.shift
       values.store(:zone, zone) if zone
       event = items.shift
       values.store(:event, event) if event
