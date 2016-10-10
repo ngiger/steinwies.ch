@@ -1,31 +1,53 @@
-GEM
-  remote: https://rubygems.org/
+PATH
+  remote: /home/niklaus/git/htmlgrid
   specs:
-    childprocess (0.5.9)
-      ffi (~> 1.0, >= 1.0.11)
-    commonwatir (4.0.0)
-    ffi (1.9.14)
-    hpricot (0.8.6)
-    htmlgrid (1.1.3)
+    htmlgrid (1.1.2)
       sbsm (>= 1.2.7)
-    mail (2.6.4)
-      mime-types (>= 1.16, < 4)
-    mime-types (3.1)
-      mime-types-data (~> 3.2015)
-    mime-types-data (3.2016.0521)
-    minitest (5.9.0)
-    rack (2.0.1)
-    rake (11.2.2)
-    rclconf (1.0.0)
-    rubyzip (1.2.0)
+
+PATH
+  remote: /home/niklaus/git/sbsm
+  specs:
     sbsm (1.3.0)
       hpricot
       mail
       rack
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    byebug (9.0.6)
+    childprocess (0.5.9)
+      ffi (~> 1.0, >= 1.0.11)
+    coderay (1.1.1)
+    commonwatir (4.0.0)
+    ffi (1.9.14)
+    hpricot (0.8.6)
+    mail (2.6.4)
+      mime-types (>= 1.16, < 4)
+    method_source (0.8.2)
+    mime-types (3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0521)
+    minitest (5.9.0)
+    passenger (5.0.30)
+      rack
+      rake (>= 0.8.1)
+    pry (0.10.4)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    pry-byebug (3.4.0)
+      byebug (~> 9.0)
+      pry (~> 0.10)
+    rack (2.0.1)
+    rake (11.2.2)
+    rclconf (1.0.0)
+    rubyzip (1.2.0)
     selenium-webdriver (2.53.4)
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
       websocket (~> 1.0)
+    slop (3.6.0)
     watir (5.0.0)
       commonwatir (~> 4)
       watir-webdriver
@@ -37,12 +59,14 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  htmlgrid (~> 1.1.3)
+  htmlgrid!
   minitest (~> 5.9)
+  passenger (>= 5.0.25)
+  pry-byebug
   rake (~> 11.2)
   rclconf (= 1.0.0)
-  sbsm (~> 1.3.0)
+  sbsm!
   watir (~> 5.0.0)
 
 BUNDLED WITH
-   1.12.5
+   1.13.2
