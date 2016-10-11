@@ -26,7 +26,7 @@ ruby 2.3.1p112 (2016-04-26 revision 54768) [x86_64-linux]
 % bundle install --path vendor
 ```
 
-### Configureation
+### Configuration
 
 Use sample files in `etc` directory.
 

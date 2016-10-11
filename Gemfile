@@ -7,6 +7,7 @@ gem 'rclconf',  '1.0.0'
 group :test do
   gem 'minitest', '~> 5.9'
   gem 'watir',    '~> 5.0.0'
+  gem 'foreman'
 end
 
 group :development, :test do
