@@ -2,8 +2,11 @@ language: ruby
 before_install:
   - gem install bundler
   - sudo apt-get -qq update
-  - sudo apt-get install -y nodejs nodeenv
+  - sudo apt-get install -y nodejs
+  - sudo pip install nodeenv
+  - sudo nodeenv --node=0.12.15 env
   - source env/bin/activate
+  - npm install
 
 bundler_args: --without debugger
 
