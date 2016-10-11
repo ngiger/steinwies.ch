@@ -1,4 +1,8 @@
 language: ruby
+cache:
+  - bundler
+  - pip
+
 before_install:
   - gem install bundler
   - sudo apt-get -qq update
