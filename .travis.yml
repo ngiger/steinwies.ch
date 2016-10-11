@@ -1,0 +1,28 @@
+language: ruby
+cache:
+  - bundler
+  - pip
+
+before_install:
+  - gem install bundler
+  - sudo apt-get -qq update
+  - sudo apt-get install -y nodejs
+  - sudo pip install nodeenv
+  - sudo nodeenv --node=0.12.15 env
+  - source env/bin/activate
+  - npm install
+
+bundler_args: --without debugger
+
+script:
+  - bundle exec rake test
+
+notifications:
+  email:
+  - ngiger@ywesee.com
+rvm:
+  - ruby-head
+  - 2.3.1
+matrix:
+  allow_failures:
+    - rvm: ruby-head

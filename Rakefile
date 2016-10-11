@@ -1,6 +1,13 @@
 src = File.expand_path('../src', __FILE__)
 $: << src unless $:.include?(src)
 
+config = File.expand_path('../etc/config.yml', __FILE__)
+if !File.exist?(config)
+  FileUtils.makedirs(File.dirname(config), :verbose => TRUE)
+  FileUtils.cp(config + '.sample', config, :verbose => TRUE)
+end
+
+
 require 'rake/testtask'
 require 'rake/clean'
 
