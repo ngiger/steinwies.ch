@@ -3,8 +3,9 @@ source 'https://rubygems.org'
 if File.directory?('../sbsm')
   gem 'sbsm', :path => '../sbsm'
 else
-  gem 'sbsm', '>= 1.3.0'
+  gem 'sbsm', :git => 'https://github.com/ngiger/sbsm.git', :branch => 'rack'
 end
+
 if File.directory?('../htmlgrid')
   gem 'htmlgrid', :path => '../htmlgrid'
 else

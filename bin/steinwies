@@ -9,7 +9,6 @@ require 'steinwies'
 require 'util/app'
 require 'util/config'
 
-# app = Steinwies::App.new
-app = Rack::SteinwiesApp.new
+app = Steinwies::App.new
 DRb.start_service(Steinwies.config.server_uri, app)
 DRb.thread.join
