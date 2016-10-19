@@ -11,9 +11,11 @@ module Steinwies
 
     def confirm
       mail = KontaktMail.new(@session)
+      puts "confirm #{mail.inspect} #{mail.ready?.inspect}"
       if mail.ready?
         ConfirmState.new(@session, mail)
       else
+        puts "Pushed error"
         mail.errors.push(:email)
         @model = mail
         self

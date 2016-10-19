@@ -16,6 +16,8 @@ gem 'rclconf',  '1.0.0'
 gem "passenger", ">= 5.0.25", require: "phusion_passenger/rack_handler"
 
 group :test do
+  gem 'nokogiri'
+  gem "rack-test", require: "rack/test"
   gem 'minitest', '~> 5.9'
   gem 'watir',    '~> 5.0.0'
   gem 'foreman'

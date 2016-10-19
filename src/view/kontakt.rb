@@ -85,6 +85,7 @@ module Steinwies
 
     def init
       super
+      puts "init view kontakt #{@model.class} error #{ @model.respond_to?(:error?)}"
       if @model.respond_to?(:error?) && @model.error?(:email)
         new_content = HtmlGrid::Text.new(
           :error_message, @model, @session, self)
