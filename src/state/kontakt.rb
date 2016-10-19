@@ -9,9 +9,14 @@ module Steinwies
     DIRECT_EVENT = :kontakt
     VIEW         = Kontakt
 
+    def initialize(session, model)
+      puts "state/kontakt.rb #{__LINE__} Steinwies init #{session.class} model #{model.class}"
+      super(session, model)
+    end
     def confirm
+      binding.pry
       mail = KontaktMail.new(@session)
-      puts "confirm #{mail.inspect} #{mail.ready?.inspect}"
+      puts "state/kontakt.rb #{__LINE__} confirm #{mail.inspect} #{mail.ready?.inspect}"
       if mail.ready?
         ConfirmState.new(@session, mail)
       else

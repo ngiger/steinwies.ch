@@ -3,6 +3,7 @@ $:.unshift File.expand_path('..', File.dirname(__FILE__))
 require 'minitest/autorun'
 require 'test_helper'
 require 'nokogiri'
+require 'pry'
 
 class SteinwiesTest < Minitest::Test
   def test_kontakt_has_sub_title
@@ -31,23 +32,6 @@ class SteinwiesTest < Minitest::Test
     assert_equal 'text', textarea.attributes['name'].value
   end
 
-  patterns = [ /^name/,
-                /^vorname/,
-                /^firma/,
-                /^adresse/,
-                /^ort/,
-                /^telefon/,
-                /^bestell_diss/,
-                /^bestell_pedi/,
-                ]
-  patterns = [ 'name',
-                'vorname',
-               ]
-  patterns.each do |pattern|
-    pattern_test(pattern)
-    # eval("test_kontakt_pat_#{pattern} #{pattern}")
-  end if false
-
   def test_kontakt_has_form_elements
     get '/de/page/kontakt'
     assert last_response.ok?
@@ -61,12 +45,8 @@ class SteinwiesTest < Minitest::Test
                   /^bestell_diss/,
                   /^bestell_pedi/,
                   ]
-    # patterns= [/resetxxx/]
     patterns.each do |pattern|
-      # puts "Checking for #{pattern}"
-      # found = page.css('td').find_all{|td| td.children && td.children.size >= 2 && td.children[1].name.eql?('input')  && pattern.match(td.children[1].attributes['name'].value) }
       found = get_input_field(page, pattern)
-      # require 'pry'; binding.pry
       assert_equal 1, found.size, "Must find input with name #{pattern}"
     end
     assert_equal 1, page.css('textarea').size, 'must have a text area'
@@ -75,24 +55,24 @@ class SteinwiesTest < Minitest::Test
   end
 
   def test_kontakt_submit_kontakt
-    # get '/de/page/kontakt'
-    # assert last_response.ok?
-    # page = Nokogiri::HTML(last_response.body)
-
-    post "/de/page/kontakt"
+    header 'Test-Header', 'Test value'
+    url = '/de/page/kontakt'
+    clear_cookies
+    get url
     assert last_response.ok?
+    assert rack_mock_session.cookie_jar.to_hash['sbsm-persistent-cookie']
+    assert rack_mock_session.cookie_jar.to_hash['_session_id']
+    puts  rack_mock_session.cookie_jar.to_hash['sbsm-persistent-cookie']
     page = Nokogiri::HTML(last_response.body)
-    # post "/photos", "file" => Rack::Test::UploadedFile.new("me.jpg", "image/jpeg")
-  end
-  def test_kontakt_hello_form_post
-    # email=ngiger%40ywesee.com&anrede=Herr&name=Giger&vorname=Niklaus&firma=&adresse=Wieshoschet+6&ort=8753+Mollis&telefon=&bestell_diss=&bestell_pedi=
-    #&confirm=Weiter&text=Test-Mail.+Bitte+ignorieren&flavor=&language=en&event=confirm&state_id=69945621979720
-    result =   post '/hello/', params={:email => 'test@user.org',
+    x = page.css('div')
+    assert_equal 'state_id', x.children[7].attributes['name'].value
+    state_id = x.children[7].attributes['value'].value
+    post_result =   post url, params={:email => 'test@user.org',
                                        :anrede => "Herr",
                                        :name => 'Bond',
                                        :vorname => 'James',
                                        :telefon => '',
-                                       :firma=> '',
+                                       :firma=> 'MI6',
                                        :ort => '1234 name',
                                        :bestell_diss => '',
                                        :bestell_pedi => '',
@@ -100,9 +80,13 @@ class SteinwiesTest < Minitest::Test
                                        :text => 'Test-Mail. Bitte ignorieren',
                                        :flavor => '',
                                        :language => 'en',
-                                       :event => 'confirm',
-                                       :state_id => '69945621979720',
-                                       }
+                                       # :event => 'confirm',
+                                       :state_id => state_id}#,
+    pattern = 'Mail senden'
+    puts "_current_session_names are #{_current_session_names}"
+    puts last_response.headers
+    puts  last_request.url
+    assert_equal true, last_response.body.include?(pattern), "Response body must include <#{pattern}>"
     assert_equal 'application/x-www-form-urlencoded', last_response.headers['Content-Type']
     expected =
         [ /^sbsm-persistent-cookie=language\%3Den$/,
@@ -110,7 +94,6 @@ class SteinwiesTest < Minitest::Test
           ]
     # expected.each{|pattern] assert last_response.headers['Cookie'].find{|x| pattern.match(x) }
     assert last_response.ok?
-    assert last_response.body.include?('I just wanted to say')
   end
 end
 
