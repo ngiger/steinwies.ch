@@ -12,7 +12,8 @@ logname = File.expand_path(File.join(File.dirname(__FILE__), "log/access.log"))
 FileUtils.makedirs(File.dirname(logname))
 Rack::Server.start(
   :app => Rack::ShowExceptions.new(Rack::Lint.new(Steinwies::App.new)),
-  :Port => 9292,
-  :Logger => WEBrick::Log.new(logname, WEBrick::Log::INFO),
-  :AccessLog => [[File.open(logname,'w'),WEBrick::AccessLog::COMBINED_LOG_FORMAT]]
+  :Port => 8004
 )
+
+#  :Logger => WEBrick::Log.new(logname, WEBrick::Log::INFO),
+#  :AccessLog => [[File.open(logname,'w'),WEBrick::AccessLog::COMBINED_LOG_FORMAT]]

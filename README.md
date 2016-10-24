@@ -44,11 +44,10 @@ And then, boot application server as `bundle exec ./bin/steinwies`.
 
 ### Dependencies
 
-* Ruby
+* Ruby (for the used gems see the Gemfile)
 * Node.js
 
 * [minitest](https://github.com/seattlerb/minitest)
-* [Selenium](http://docs.seleniumhq.org/) (via [watir](https://github.com/watir/watir))
 * [PhantomJS](https://github.com/ariya/phantomjs)
 
 ### Setup
@@ -86,7 +85,6 @@ You must start the DRB server process and the Rack-Webserver in two seperate thr
 * `bundle exec bin/steinwies`
 * `bundle exec rackup`
 
-```
 ## Open problems
 
 * Submitting the form does not work see test_kontakt_submit_kontakt
