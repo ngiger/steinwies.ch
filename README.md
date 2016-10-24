@@ -1,14 +1,14 @@
 # steinwies.ch
 
-[steinwies.ch](http://steinwies.ch/)
+* [steinwies.ch](http://steinwies.ch/)
+* https://github.com/zdavatz/steinwies.ch (source)
 
 ## Setup
 
 ### Requirements
 
 * Ruby, `>= 2.3.1`
-* Apache2
-* [mod_ruby](https://github.com/shugo/mod_ruby) (It works with Ruby `1.8.6`)
+* Apache2 with a ProxyPass
 * cronolog (optional)
 * daemontools (for davazd, yusd)
 
@@ -72,25 +72,25 @@ And then, boot application server as `bundle exec ./bin/steinwies`.
 
 #### Test suite
 
-```zsh
-% bundle exec rake test
-```
+`bundle exec rake test`
 
 #### Single feature test
 
-```zsh
-: `DEBUG=true` is useful for debug (but it might be not interested)
-bundle exec foreman run ruby -I.:test test/feature/home_test.rb
-Run options: --seed 33427
+`bundle exec test/feature/kontakt_test.rb --name test_kontakt_submit_kontakt`
 
-# Running:
 
-**
+### Running:
 
-Fabulous run in 3.490279s, 0.5730 runs/s, 3.7246 assertions/s.
+You must start the DRB server process and the Rack-Webserver in two seperate threads using
 
-2 runs, 13 assertions, 0 failures, 0 errors, 0 skips
+* `bundle exec bin/steinwies`
+* `bundle exec rackup`
+
 ```
+## Open problems
+
+* Submitting the form does not work see test_kontakt_submit_kontakt
+* Combine logging of apache and running Ruby processes?
 
 ## License
 

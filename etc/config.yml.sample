@@ -6,7 +6,7 @@ mailer:
     - steinwies@example.org
   server:
   domain: example.org
-  port: 587
+  port: 8006
   auth: plain
   user: steinwies@example.org
   pass:

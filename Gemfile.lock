@@ -7,7 +7,7 @@ PATH
 PATH
   remote: ../sbsm
   specs:
-    sbsm (1.3.0)
+    sbsm (1.3.1)
       hpricot
       mail
       rack
