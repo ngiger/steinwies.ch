@@ -52,14 +52,16 @@ Steinwies.config.environment   = 'test'
 
 require 'util/app'
 require 'rack/test'
+OUTER_APP = Rack::Builder.parse_file('config.ru').first
 
 class SteinwiesTest < Minitest::Test
   include Rack::Test::Methods
   @drb_server = nil
   def app
-    @app = Steinwies::App.new
+    OUTER_APP
   end
   def setup
+    puts "setup starting"
     @drb = Thread.new do
       begin
         DRb.stop_service
@@ -75,10 +77,12 @@ class SteinwiesTest < Minitest::Test
     # Wait for service to be ready, or the tests will fail with DRb-errors
     until @drb_server && @drb_server.alive? do  sleep 0.005 end
     @drb.abort_on_exception = false
-  end
+    puts "setup done"
+  end if false
   def teardown
     # @drb.exit
     DRb.stop_service
     @drb_server = nil
-  end
+    puts "teardown starting"
+  end if false
 end

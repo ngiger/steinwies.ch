@@ -10,10 +10,13 @@ DRb.start_service('druby://localhost:0')
 name = File.basename(File.dirname(__FILE__))
 logname = File.expand_path(File.join(File.dirname(__FILE__), "log/access.log"))
 FileUtils.makedirs(File.dirname(logname))
-Rack::Server.start(
-  :app => Rack::ShowExceptions.new(Rack::Lint.new(Steinwies::App.new)),
-  :Port => 8004
+app = Rack::ShowExceptions.new(Rack::Lint.new(Steinwies::App.new))
+# app = Rack::ShowExceptions.new(Steinwies::App.new)
+sessioned = Rack::Session::Pool.new(app,
+  :domain => 'foo.com',
+  :expire_after => 2592000
 )
-
-#  :Logger => WEBrick::Log.new(logname, WEBrick::Log::INFO),
-#  :AccessLog => [[File.open(logname,'w'),WEBrick::AccessLog::COMBINED_LOG_FORMAT]]
+Rack::Server.start( :app => sessioned,
+                    :Port => 8004,
+                  )
+Rack::Handler::WEBrick.run sessioned, {:Port => 8004} if false
