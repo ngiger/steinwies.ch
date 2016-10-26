@@ -13,8 +13,10 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require 'watir'
 require 'rclconf'
+puts __LINE__
 require 'steinwies'
 require 'util/config'
+puts __LINE__
 
 # debugging
 DEBUG    = (ENV['DEBUG'] == 'true' || false)
@@ -26,9 +28,11 @@ TEST_SRV_URI = URI.parse(ENV['TEST_SRV_URL'] || 'http://127.0.0.1:11080')
 TEST_APP_URI = URI.parse(ENV['TEST_APP_URL'] || 'druby://127.0.0.1:11081')
 
 # Dir[root_dir.join('test/support/**/*.rb')].each { |f| require f }
+puts __LINE__
 
 require 'watir-webdriver/wait'
 
+puts __LINE__
 module WaitUntil
   def wait_until(&block)
     raise ArgumentError unless block_given?
@@ -50,15 +54,19 @@ Watir.default_timeout = TEST_CLIENT_TIMEOUT
 Steinwies.config.document_root = root_dir.join('doc').to_s
 Steinwies.config.environment   = 'test'
 
+puts __LINE__
 require 'util/app'
+puts __LINE__
 require 'rack/test'
-OUTER_APP = Rack::Builder.parse_file('config.ru').first
+puts __LINE__
+# OUTER_APP = Rack::Builder.parse_file('config.ru').first
 
 class SteinwiesTest < Minitest::Test
   include Rack::Test::Methods
   @drb_server = nil
   def app
-    OUTER_APP
+    # OUTER_APP
+    Rack::ShowExceptions.new(Steinwies::App.new)
   end
   def setup
     puts "setup starting"
