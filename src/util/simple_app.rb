@@ -2,7 +2,6 @@
 
 require 'drb/drb'
 SERVER_URI = 'druby://localhost:18999'
-COOKIE_ID = 'sbsm-persistent-cookie-id'
 
 class CGI
   class Session
@@ -43,6 +42,7 @@ end
 
 # next simplied from sbsm/lib/sbsm/drbserver.rb
 module SBSM
+  COOKIE_ID = 'sbsm-persistent-cookie-id'
   class DRbServer # < SimpleDelegator
     include DRbUndumped
     def initialize(persistence_layer=nil)
@@ -187,25 +187,22 @@ class Simple < SBSM::DRbServer
 end
 
   class PassThrough
-    attr_accessor :session_pool
     @@counter = 0
     def initialize(app)
       @app = Simple.new
       puts "#{File.basename(__FILE__)}:#{__LINE__} initialize @app is now #{@app.inspect}"
-      @session_pool = Rack::Session::Pool.new(@app, :domain => 'foo.com', :expire_after => 2592000  )
     end
     def call(env) ## mimick sbsm/lib/app.rb
       request = Rack::Request.new(env)
       puts "#{File.basename(__FILE__)}:#{__LINE__} cookies are #{request.cookies}"
-      session_id = request.cookies[COOKIE_ID]
-      session_id =  Random.rand.to_s if request.cookies[COOKIE_ID].length <= 1
-      puts "#{File.basename(__FILE__)}:#{__LINE__} _session_id is #{session_id} or #{request.session.id.inspect}"
+      session_id = request.cookies[SBSM::COOKIE_ID]
+      session_id =  Random.rand.to_s if request.cookies[SBSM::COOKIE_ID].length <= 1
+      puts "#{File.basename(__FILE__)}:#{__LINE__} _session_id is #{session_id}"
       if /favicon.ico/i.match(request.path)
         return [400, {}, []]
       end
       saved = request.cookies['old_path']
-      session = Rack::Session::Abstract::SessionHash.find(request)
-      puts "#{File.basename(__FILE__)}:#{__LINE__} found session #{session} @session_handler is_? #{@session_handler.class}"
+      puts "#{File.basename(__FILE__)}:#{__LINE__} found session_id #{session_id} @session_handler is_? #{@session_handler.class}"
       @@counter += 1
       response = Rack::Response.new
       cgi_handler = DRbObject.new_with_uri(SERVER_URI)
@@ -213,8 +210,7 @@ end
       puts "result is #{result.inspect} session_id #{session_id}"
       @@counter += 1
       # [200, {}, ["Hello World <br> We moved from #{saved}. now at #{request.path}"]]
-      response.set_cookie('_session_id', session.id)
-      response.set_cookie(COOKIE_ID, {:value => session_id, :path => "/", :expires => Time.now+24*60*60})
+      response.set_cookie(SBSM::COOKIE_ID, {:value => session_id, :path => "/", :expires => Time.now+24*60*60})
       # require 'pry'; binding.pry
       response.set_cookie('@@counter', {:value => @@counter, :path => "/", :expires => Time.now+24*60*60})
       response.set_cookie('old_path', {:value => request.path, :path => "/", :expires => Time.now+24*60*60})
