@@ -15,7 +15,7 @@ puts "Using Rack::Session::Cookie"
 use Rack::Session::Pool
 puts "Using Rack::Session::Pool"
 #  myapp = MyRackApp.new
-myapp = Rack::ShowExceptions.new(Rack::Lint.new(PassThrough.new(Simple.new )))
+myapp = Rack::ShowExceptions.new(Rack::Lint.new(Steinwies::PassThrough.new( Steinwies::App.new )))
 sessioned = Rack::Session::Pool.new(myapp,
   :domain => 'foo.com',
   :expire_after => 2592000
