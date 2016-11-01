@@ -60,14 +60,5 @@ module Steinwies
         @trans_handler = nil
       super(nil)
     end
-
-    def to_html
-      SBSM.info "Some html"
-      require 'pry'; binding.pry
-      @counter += 1
-      content = "to_html for #{self.class} is #{Process.pid}"
-      # content += "\nsession_id is #{session_id}"
-      content += "\n@counter is #{@counter}"
-    end
   end
 end
