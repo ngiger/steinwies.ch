@@ -2,6 +2,7 @@
 
 require 'drb/drb'
 require 'util/validator'
+require 'sbsm/logger'
 require 'sbsm/session'
 
 Validator = Steinwies::Validator
@@ -21,7 +22,7 @@ class Session < SBSM::Session
 #  LOOKANDFEEL      = Lookandfeel
 
   def initialize(key, app, validator=Validator.new)
-    puts "#{File.basename(__FILE__)}:#{__LINE__} Session #{app}"
+    SBSM.info "Session #{app}"
     super
   end
 
@@ -37,62 +38,56 @@ end
 class SimpleSBSM < SBSM::DRbServer
   SESSION = Session
   # attr_accessor :validator
+  attr_reader :trans_handler
   def initialize
-    puts "#{File.basename(__FILE__)}:#{__LINE__} SimpleSBSM.new"#  persistence_layer #{persistence_layer.inspect}"
+    SBSM.info "SimpleSBSM.new"
     # @validator = nil
+      @trans_handler = nil
     super(nil)
-  end
-  def to_s
-    res = "#{File.basename(__FILE__)}:#{__LINE__} Im the Steinwies DrbServer from the pid #{Process.pid}"
-    puts res
-    res
   end
 end
 
   class PassThrough
     @@counter = 0
     attr_reader :request, :trans_handler
-    PERSISTENT_COOKIE_NAME = 'passthrough-cookie-id'
+    PERSISTENT_COOKIE_NAME = 'passthrough-cookie-id2'
     def initialize(app, validator = nil)
       @app = app
       @trans_handler = nil
-      puts "#{File.basename(__FILE__)}:#{__LINE__} initialize @app is now #{@app.inspect}"
+      SBSM.info "initialize @app is now #{@app.inspect}"
     end
     def call(env) ## mimick sbsm/lib/app.rb
       request = Rack::Request.new(env)
-      puts "#{File.basename(__FILE__)}:#{__LINE__} cookies are #{request.cookies}"
-      session_id = request.cookies[PERSISTENT_COOKIE_NAME]
-      session_id =  Random.rand.to_s unless request.cookies[PERSISTENT_COOKIE_NAME] && request.cookies[PERSISTENT_COOKIE_NAME].length > 1
-      puts "#{File.basename(__FILE__)}:#{__LINE__} _session_id is #{session_id}"
-      if /favicon.ico/i.match(request.path)
-        return [400, {}, []]
+      SBSM.info "cookies are #{request.cookies}"
+      if request.cookies[PERSISTENT_COOKIE_NAME] && request.cookies[PERSISTENT_COOKIE_NAME].length > 1
+        session_id = request.cookies[PERSISTENT_COOKIE_NAME]
+      else
+        session_id = rand((2**(0.size * 8 -2) -1)*10240000000000).to_s(16)
       end
+
+      return [400, {}, []] if /favicon.ico/i.match(request.path)
       saved = request.cookies['old_path']
-      puts "#{File.basename(__FILE__)}:#{__LINE__} found session_id #{session_id} @session_handler is_? #{@session_handler.class}"
+      SBSM.info "found session_id #{session_id} @session_handler is_? #{@session_handler.class}"
       @@counter += 1
       response = Rack::Response.new
       # result = DRbObject.new_with_uri(SERVER_URI).process(request)
-
-      session = @app[session_id]
-      @request = request
-      result = session.process(self)
-      puts "result is #{result.inspect} session_id #{session_id} WebRick has pid #{Process.pid}"
-      puts DRbObject.new_with_uri(SERVER_URI).to_s
-      puts session.to_s
-      # @proxy = DRbObject.new_with_uri(SERVER_URI)
-      @proxy =  DRbObject.new(session, SERVER_URI)
-      puts @proxy.to_s
-      session.drb_process self # das läuft
-      res = @proxy.drb_process(self) # das nicht
-      html = @response.write(res)
+      @drb_uri = SERVER_URI
+      args = {
+        'database_manager'  =>  CGI::Session::DRbSession,
+        'drbsession_uri'    =>  @drb_uri,
+        'session_path'      =>  '/',
+      }
+      @cgi = CGI.initialize_without_offline_prompt('html4')
+      @session = CGI::Session.new(@cgi, args)
+      @proxy = @session[:proxy]
+      res = @proxy.drb_process(self, request)
+      html = response.write(res)
       response.write html
       response.write "\nPassthrough (WebRick PID) is #{Process.pid}"
       response.write "\n@@counter is #{@@counter}"
       response.write "\nsession_id is #{session_id}"
-      @@counter += 1
       # [200, {}, ["Hello World <br> We moved from #{saved}. now at #{request.path}"]]
       response.set_cookie(PERSISTENT_COOKIE_NAME, {:value => session_id, :path => "/", :expires => Time.now+24*60*60})
-      # require 'pry'; binding.pry
       response.set_cookie('@@counter', {:value => @@counter, :path => "/", :expires => Time.now+24*60*60})
       response.set_cookie('old_path', {:value => request.path, :path => "/", :expires => Time.now+24*60*60})
       response.finish
