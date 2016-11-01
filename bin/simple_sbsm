@@ -5,7 +5,7 @@ $: << File.expand_path('../src', File.dirname(__FILE__))
 require 'util/simple_sbsm'
 require 'drb/drb'
 
-
-puts "Starting #{SERVER_URI}"
+SBSM.info msg = "Starting #{SERVER_URI}"
+puts msg
 DRb.start_service(SERVER_URI, Steinwies::SimpleSBSM.new)
 DRb.thread.join
