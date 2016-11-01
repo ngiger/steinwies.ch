@@ -1,96 +1,73 @@
 #!/usr/local/bin/ruby
-
+# Niklaus Giger, November 2016
+# A simple example on how to use SBSM with webrick
 require 'drb/drb'
-require 'util/validator'
 require 'sbsm/logger'
 require 'sbsm/session'
-
-Validator = Steinwies::Validator
-SERVER_URI = 'druby://localhost:18998'
-
+require 'sbsm/validator'
 require 'sbsm/drbserver'
+require 'state/global_predefine'
+
+SERVER_URI = 'druby://localhost:18998'
 
 # next simplied from steinwies.ch/src/util/app
 module Steinwies
-
-# next simplied from steinwies.ch/src/session/app
-class Session < SBSM::Session
-  SERVER_NAME      = 'localhost:8998'
-#  DEFAULT_LANGUAGE = 'de'
-#  DEFAULT_STATE    = HomeState
-#  DEFAULT_ZONE     = 'page'
-#  LOOKANDFEEL      = Lookandfeel
-
-  def initialize(key, app, validator=Validator.new)
-    SBSM.info "Session #{app}"
-    super
+  class Validator < SBSM::Validator
+    EVENTS = %i{
+      home
+    }
+    STRINGS = %i{
+    }
   end
 
-  def flavor
-    nil
-  end
-
-  def zone
-    DEFAULT_ZONE
-  end
-end
-
-class SimpleSBSM < SBSM::DRbServer
-  SESSION = Session
-  # attr_accessor :validator
-  attr_reader :trans_handler
-  def initialize
-    SBSM.info "SimpleSBSM.new"
-    # @validator = nil
-      @trans_handler = nil
-    super(nil)
-  end
-end
-
-  class PassThrough
-    @@counter = 0
-    attr_reader :request, :trans_handler
-    PERSISTENT_COOKIE_NAME = 'passthrough-cookie-id2'
-    def initialize(app, validator = nil)
-      @app = app
-      @trans_handler = nil
-      SBSM.info "initialize @app is now #{@app.inspect}"
+  class HomeState < GlobalState
+    @@class_counter = 0
+    def initialize(arg1, arg2)
+      @member_counter = 0
+      super(arg1, arg2)
     end
-    def call(env) ## mimick sbsm/lib/app.rb
-      request = Rack::Request.new(env)
-      SBSM.info "cookies are #{request.cookies}"
-      if request.cookies[PERSISTENT_COOKIE_NAME] && request.cookies[PERSISTENT_COOKIE_NAME].length > 1
-        session_id = request.cookies[PERSISTENT_COOKIE_NAME]
-      else
-        session_id = rand((2**(0.size * 8 -2) -1)*10240000000000).to_s(16)
-      end
+    def to_html(cgi)
+      @@class_counter += 1
+      @member_counter += 1
+      info = ["State is Home" ,
+      "pid is #{Process.pid}",
+      "request_path is #{@request_path}" ,
+      "@member_counter is #{@member_counter}",
+      "@@class_counter is #{@@class_counter}",
+      ]
+      puts info.join("\n  ")
+      info.join("\n")
+    end
+  end
 
-      return [400, {}, []] if /favicon.ico/i.match(request.path)
-      saved = request.cookies['old_path']
-      SBSM.info "found session_id #{session_id} @session_handler is_? #{@session_handler.class}"
-      @@counter += 1
-      response = Rack::Response.new
-      # result = DRbObject.new_with_uri(SERVER_URI).process(request)
-      @drb_uri = SERVER_URI
-      args = {
-        'database_manager'  =>  CGI::Session::DRbSession,
-        'drbsession_uri'    =>  @drb_uri,
-        'session_path'      =>  '/',
-      }
-      @cgi = CGI.initialize_without_offline_prompt('html4')
-      @session = CGI::Session.new(@cgi, args)
-      @proxy = @session[:proxy]
-      res = @proxy.drb_process(self, request)
-      html = response.write(res)
-      response.write html
-      response.write "\nPassthrough (WebRick PID) is #{Process.pid}"
-      response.write "\n@@counter is #{@@counter}"
-      response.write "\nsession_id is #{session_id}"
-      # [200, {}, ["Hello World <br> We moved from #{saved}. now at #{request.path}"]]
-      response.set_cookie(PERSISTENT_COOKIE_NAME, {:value => session_id, :path => "/", :expires => Time.now+24*60*60})
-      response.set_cookie('@@counter', {:value => @@counter, :path => "/", :expires => Time.now+24*60*60})
-      response.set_cookie('old_path', {:value => request.path, :path => "/", :expires => Time.now+24*60*60})
-      response.finish
+  # next simplied from steinwies.ch/src/session/app
+  class Session < SBSM::Session
+    SERVER_NAME      = 'localhost:8998'
+    DEFAULT_STATE    = HomeState
+    def initialize(key, app, validator=Validator.new)
+      SBSM.info "Session #{app}"
+      super
+    end
+  end
+
+  class SimpleSBSM < SBSM::DRbServer
+    SESSION = Session
+    # attr_accessor :validator
+    attr_reader :trans_handler
+    def initialize
+      SBSM.info "SimpleSBSM.new"
+      # @validator = nil
+        @trans_handler = nil
+      super(nil)
+    end
+
+    def to_html
+      SBSM.info "Some html"
+      require 'pry'; binding.pry
+      @counter += 1
+      content = "to_html for #{self.class} is #{Process.pid}"
+      # content += "\nsession_id is #{session_id}"
+      content += "\n@counter is #{@counter}"
     end
   end
 end
