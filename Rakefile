@@ -6,6 +6,16 @@ if !File.exist?(config)
   FileUtils.makedirs(File.dirname(config), :verbose => TRUE)
   FileUtils.cp(config + '.sample', config, :verbose => TRUE)
 end
+ desc "create RDoc documentation"
+
+ task :rdoc do
+   cmd = "bundle exec rdoc --exclude='/coverage|vendor|test|data|etc|Manifest|.*.lock|.*.css|.*.js|.*.gemspec/' --include=lib" +
+       " --main=niklaus --title=SBSM"
+   puts cmd
+   res = system(cmd)
+   puts "Running test/suite.rb returned #{res.inspect}. Output is found in the doc sub-directory"
+   exit 1 unless res
+ end
 
 
 require 'rake/testtask'
