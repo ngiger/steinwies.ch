@@ -1,28 +1,13 @@
 #!/usr/bin/env ruby
 
 $: << File.expand_path('../src', File.dirname(__FILE__))
-
 $0 = 'Steinwies'
-
 require 'drb/drb'
-  puts __LINE__
 require 'steinwies'
-  puts __LINE__
-  puts __LINE__
 require 'util/config'
-  puts __LINE__
 
-if true
-  require 'util/app'
-  app = Steinwies::App.new
-  DRb.start_service(Steinwies.config.server_uri, app)
-  puts "Started #{Steinwies.config.server_uri}"
-  DRb.thread.join
-else
-  puts __LINE__
 require 'util/app_webrick'
-  require 'pry'; binding.pry
-  app = Steinwies::App.new
-  # Steinwies::App.new.start_drb_server
-  puts __LINE__
-end
+SBSM.info msg = "Starting #{Steinwies.config.server_uri}"
+puts msg
+DRb.start_service(Steinwies.config.server_uri, Steinwies::AppWebrick.new)
+DRb.thread.join

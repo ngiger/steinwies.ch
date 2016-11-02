@@ -11,7 +11,20 @@ require 'util/app'
 require 'pry'
 
 module Steinwies
-  class AppWebrick < SBSM::App
+  class AppWebrick < SBSM::DRbServer
+    SESSION = Session
+    attr_reader :trans_handler, :validator, :drb_uri
+    def initialize(persistence_layer=nil)
+      SBSM.info "Steinwies::AppWebrick.new"
+      @validator = Validator.new
+      @trans_handler = TransHandler.instance
+      @drb_uri = Steinwies.config.server_uri
+      super(persistence_layer)
+    end
+  end
+
+  # TODO: Initialize application more easily
+  class AppWebrickXXX < SBSM::App
     def initialize
       puts "Passing app Steinwies::App"
       super(app: ::Steinwies::App,

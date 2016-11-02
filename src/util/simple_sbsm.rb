@@ -53,9 +53,10 @@ module Steinwies
   class SimpleSBSM < SBSM::DRbServer
     SESSION = Session
     # attr_accessor :validator
-    attr_reader :trans_handler
+    attr_reader :trans_handler, :drb_uri
     def initialize
       SBSM.info "SimpleSBSM.new"
+      @drb_uri = SERVER_URI
       # @validator = nil
         @trans_handler = nil
       super(nil)

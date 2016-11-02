@@ -91,7 +91,7 @@ module Steinwies
           :error_message, @model, @session, self)
         @grid.insert_row(1, new_content)
       end
-      require 'pry'; binding.pry
+      # require 'pry'; binding.pry
     end
   end
 
