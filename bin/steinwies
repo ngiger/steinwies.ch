@@ -6,7 +6,7 @@ require 'drb/drb'
 require 'steinwies'
 require 'util/config'
 
-require 'util/app_webrick'
+require 'util/app'
 SBSM.info msg = "Starting #{Steinwies.config.server_uri}"
 puts msg
 DRb.start_service(Steinwies.config.server_uri, Steinwies::AppWebrick.new)

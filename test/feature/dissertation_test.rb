@@ -16,7 +16,6 @@ class SteinwiesTest <  Minitest::Test
     get '/de/page/dissertation'
     assert last_response.ok?
     page = Nokogiri::HTML(last_response.body)
-    skip "space are not inserted correctly"
     addresses.each do |ressource, pattern|
       found = page.css('a').find{|a|  CGI.unescapeHTML(a.attributes['href'].to_s).eql?(ressource)}
       assert found, "must find #{ressource}"

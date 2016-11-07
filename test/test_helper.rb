@@ -47,7 +47,7 @@ Watir.default_timeout = TEST_CLIENT_TIMEOUT
 Steinwies.config.document_root = root_dir.join('doc').to_s
 Steinwies.config.environment   = 'test'
 
-require 'util/app_webrick'
+require 'util/app'
 require 'rack/test'
 
 begin
@@ -67,6 +67,6 @@ class SteinwiesTest < Minitest::Test
     DRb.stop_service
   end
   def app
-    SBSM::App.new(Steinwies::AppWebrick.new )
+    Steinwies::AppWebrick.new
   end
 end
