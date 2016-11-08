@@ -5,7 +5,7 @@ require 'spec_helper'
 describe "steinwies.ch Homepage" do
  
   before :all do
-    waitForSteinwiesToBeReady(browser, SteinwiesUrl)
+    # waitForSteinwiesToBeReady(browser, SteinwiesUrl)
   end
 
   before :each do
@@ -28,6 +28,7 @@ describe "steinwies.ch Homepage" do
     confirm =  browser.button(:name => 'confirm')
     expect(confirm).not_to be_nil
     confirm.click
+    expect(browser.title).not_to match /Problem loading page/i
     browser.button(:name => 'confirm').wait_until_present(5)
     text = browser.text.clone
     expect(text).to match(/Bitte schreiben Sie hier Ihren Feedbacktex/)

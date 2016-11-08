@@ -14,7 +14,7 @@ module Steinwies
     LOOKANDFEEL      = Lookandfeel
 
     def initialize(key, app, validator=Validator.new)
-      super
+      super(key, app, validator)
     end
 
     def flavor

@@ -35,7 +35,7 @@ if RUBY_PLATFORM.match(/mingw/)
   browsers2test = [ :ie ]
 else
   browsers2test ||= [ ENV['BROWSER'] ] if ENV['BROWSER']
-  browsers2test = [ :firefox ] unless browsers2test and browsers2test.size > 0 # could be any combination of :ie, :firefox, :chrome
+  browsers2test = [ :chrome ] unless browsers2test and browsers2test.size > 0 # could be any combination of :ie, :firefox, :chrome
   require 'watir-webdriver'
 end
 Browser2test = browsers2test
@@ -46,16 +46,19 @@ end
 
 def setup_steinwies
   at_exit { stop_steinwies_and_browser }
-  SBSM.info msg = "Starting #{Steinwies.config.server_uri}"
-  puts Steinwies.config.server_uri
-  @pid = Process.spawn('bundle', 'exec', 'rackup', 'spec/config.ru', { :err => ['app_spec.log', 'w+'], :out => ['app_spec.log', 'a+']})
   DRb.start_service(TEST_APP_URI.to_s, Steinwies::AppWebrick.new)
+  @pid = Process.spawn('bundle', 'exec', 'rackup', 'spec/config.ru', { :err => ['app_spec.log', 'w+'], :out => ['app_spec.log', 'a+']})
+  SBSM.info msg =  "Starting #{Steinwies.config.server_uri} PID #{@pid}"
+  puts msg
   sleep(0.1)
 end
 
 def stop_steinwies_and_browser
   puts "stop_steinwies_and_browser @pid: #{@pid} browser #{browser}"
-  browser.close if browser
+  $browser.close if $browser
+  puts "stop_steinwies_and_browser after closing browser #{browser}"
+ensure
+  puts "stop_steinwies_and_browser ensure killing @pid: #{@pid}"
   if @pid
     Process.kill("HUP", @pid)
     Process.wait(@pid)
