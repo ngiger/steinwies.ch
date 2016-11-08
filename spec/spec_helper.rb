@@ -65,7 +65,7 @@ end
 def setup_browser
   return if browser
   if Browser2test[0].to_s.eql?('firefox')
-    puts "Setting upd default profile for firefox"
+    puts "Setting up default profile for firefox"
 
     profile = Selenium::WebDriver::Firefox::Profile.new
     profile['browser.download.folderList'] = 2
