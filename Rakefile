@@ -26,7 +26,14 @@ task :default => :test
 dir = File.dirname(__FILE__)
 Rake::TestTask.new do |t|
   t.libs << 'test'
-  t.test_files = Dir.glob("#{dir}/test/**/*_test.rb")
+  t.test_files = Dir.glob("#{dir}/test/feature/*_test.rb")
   t.warning = false
   t.verbose = false
+end
+
+begin
+  require 'rspec/core/rake_task'
+  RSpec::Core::RakeTask.new(:spec)
+rescue LoadError
+  puts "unable to load rspec"
 end

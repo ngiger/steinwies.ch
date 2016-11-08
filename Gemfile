@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 if File.directory?('../sbsm')
+  # gem 'sbsm', :path => '../sbsm/test_old'
   gem 'sbsm', :path => '../sbsm'
 else
   gem 'sbsm', :git => 'https://github.com/ngiger/sbsm.git', :branch => 'rack'
@@ -20,7 +21,12 @@ group :test do
   gem "rack-test", require: "rack/test"
   gem 'minitest', '~> 5.9'
   gem 'watir',    '~> 5.0.0'
+  gem 'watir-webdriver'
+#   gem 'selenium-phantomjs', '~> 0.0.3'
   gem 'foreman'
+  gem 'rspec'
+  gem 'flexmock'
+  gem 'page-object'
 end
 
 group :development, :test do

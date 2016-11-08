@@ -71,12 +71,22 @@ And then, boot application server as `bundle exec ./bin/steinwies`.
 
 #### Test suite
 
+We have unit test which use rack-test
+
+`bundle exec rake test`
+
+And we have some spec test, which spawn the Steinwies Rack and DRB servers on port 11080 and 11081 for localhost.
+Then we execute some simple access.
+
 `bundle exec rake test`
 
 #### Single feature test
 
 `bundle exec test/feature/kontakt_test.rb --name test_kontakt_submit_kontakt`
 
+Or for a single spec test:
+
+`bundle exec rspec spec/homepage_spec.rb:25`
 
 ### Running:
 

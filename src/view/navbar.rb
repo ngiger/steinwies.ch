@@ -1,6 +1,5 @@
 # Navbar -- steinwies -- 19.11.2002 -- benfay@ywesee.com
 
-require 'sbsm/request'
 require 'htmlgrid/link'
 require 'htmlgrid/composite'
 

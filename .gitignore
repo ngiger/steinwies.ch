@@ -2,10 +2,13 @@
 /svc/*
 /log/*
 /.bundle
-
+*.patch
+*.log
+.ruby-version
+.*
 /etc/*.yml
 !/etc/trans_handler.yml
-
+!.gitignore
 /env
 /node_modules
 /vendor

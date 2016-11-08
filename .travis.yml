@@ -16,6 +16,7 @@ bundler_args: --without debugger
 
 script:
   - bundle exec rake test
+  - bundle exec rake spec
 
 notifications:
   email:

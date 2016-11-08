@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
-require 'sbsm/request'
 lib_dir = File.expand_path(File.join(File.dirname(__FILE__), 'src').untaint)
 $LOAD_PATH << lib_dir
 require 'util/app'
+require 'util/config' # load config from etc/config.yml
 require 'rack'
 require 'rack/show_exceptions'
 require 'webrick'
@@ -14,6 +14,6 @@ map '/doc' do
 end
 use Rack::ContentLength
 Rack::Server.start( :app => Rack::ShowExceptions.new(Rack::Lint.new(Steinwies::AppWebrick.new())),
-                    :Port => 8004,
+                    :Port => URI('http://'+Steinwies.config.server_name).port,
                   )
 
