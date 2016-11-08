@@ -45,27 +45,12 @@ And then, boot application server as `bundle exec ./bin/steinwies`.
 ### Dependencies
 
 * Ruby (for the used gems see the Gemfile)
-* Node.js
-
-* [minitest](https://github.com/seattlerb/minitest)
-* [PhantomJS](https://github.com/ariya/phantomjs)
-
+* Selenium/Watir/geckodriver for spec test (see .travis.yml for setup)
 ### Setup
 
 ```zsh
 % git clone https://github.com/zdavatz/steinwies.ch.git
 % cd steinwies.ch
-
-: e.g. use nodeenv
-% pip install nodeenv
-% nodeenv --node=0.12.15 env
-% source env/bin/activate
-
-: install phantomjs
-(env) % npm install
-
-(env) % bundle install
-```
 
 ### How to run
 

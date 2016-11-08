@@ -8,7 +8,6 @@ require 'util/session'
 require 'util/trans_handler.steinwies'
 require 'util/config'
 require 'util/app'
-require 'pry'
 
 module Steinwies
   class AppWebrick < SBSM::App
