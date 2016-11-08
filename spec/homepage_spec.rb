@@ -4,7 +4,7 @@ require 'spec_helper'
 
 @workThread = nil
 
-describe "ch.oddb.org" do
+describe "steinwies.ch Homepage" do
  
   before :all do
     @idx = 0
@@ -21,8 +21,8 @@ describe "ch.oddb.org" do
   end
 
   it "should show contain a link to dissertation" do
-    text = @browser.text.clone
-    expect(text).to match(/Dissertationen/)
+    link = @browser.links.find{ |x| x.text.eql?('Dissertation')}
+    expect(link.name).to eql('dissertation')
   end
 
   after :all do

@@ -4,6 +4,7 @@ cache:
   - pip
 
 sudo: required
+dist: trusty # or installing google-chrome-stable will fail
 
 before_install:
   - gem install bundler

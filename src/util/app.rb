@@ -19,7 +19,6 @@ module Steinwies
       @validator = Validator.new
       @trans_handler = TransHandler.instance
       @drb_uri = Steinwies.config.server_uri
-      puts "AppWebrick drb_uri is #{ Steinwies.config}"
       super(:app => self, :validator => Validator.new, :trans_handler => SBSM::TransHandler.instance)
     end
   end

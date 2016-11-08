@@ -3,6 +3,7 @@
 lib_dir = File.expand_path(File.join(File.dirname(__FILE__), '../src').untaint)
 $LOAD_PATH << lib_dir
 $LOAD_PATH << File.dirname(lib_dir)
+require 'util/config'
 require 'spec/tst_util' # to override the DRB-port
 require 'util/app'
 use Rack::Reloader, 0
