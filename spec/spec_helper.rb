@@ -69,12 +69,25 @@ def setup_browser
     @browser = Watir::Browser.new :firefox, :profile => profile
   elsif Browser2test[0].to_s.eql?('chrome')
     puts "Setting up a default profile for chrome"
+    Selenium::WebDriver::Chrome.driver_path =  File.exist?('/usr/bin/google-chrome-stable') ?
+      '/usr/bin/google-chrome-stable' :'/usr/lib64/chromium-browser/chromedriver'
+    caps = Selenium::WebDriver::Remote::Capabilities.chrome("chromeOptions" =>
+                                                            {
+
+                                                            "args" =>
+                                                             [ "--disable-web-security" ,
+                                                               '--no-sandbox',
+                                                               '--no-default-browser-check',
+                                                               '--no-first-run',
+                                                               '--disable-default-apps',
+                                                               ]})
+    driver = Selenium::WebDriver.for :chrome,
+        :switches => %w[--ignore-certificate-errors --disable-popup-blocking --disable-translate],
+        desired_capabilities: caps
     prefs = {
-      :download => {
-        :prompt_for_download => false,
-      }
+      :download => {:prompt_for_download => false, }
     }
-    @browser = Watir::Browser.new :chrome, :prefs => prefs
+    @browser = Watir::Browser.new driver, :prefs => prefs
   elsif Browser2test[0].to_s.eql?('ie')
     puts "Trying unknown browser type Internet Explorer"
     @browser = Watir::Browser.new :ie

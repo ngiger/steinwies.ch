@@ -3,14 +3,17 @@ cache:
   - bundler
   - pip
 
+sudo: required
+
 before_install:
   - gem install bundler
   - sudo apt-get -qq update
-  - sudo apt-get install -y nodejs
-  - sudo pip install nodeenv
-  - sudo nodeenv --node=0.12.15 env
-  - source env/bin/activate
-  - npm install
+  - export CHROME_BIN=/usr/bin/google-chrome
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sudo apt-get install -y libappindicator1 fonts-liberation
+  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  - sudo dpkg -i google-chrome-stable_current_amd64.deb
 
 bundler_args: --without debugger
 
