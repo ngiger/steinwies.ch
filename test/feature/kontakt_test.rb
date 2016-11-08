@@ -65,8 +65,8 @@ class SteinwiesTest < Minitest::Test
     clear_cookies
     get url
     assert last_response.ok?
-
-    assert rack_mock_session.cookie_jar.to_hash['_session_id']
+    assert rack_mock_session.cookie_jar.to_hash[SBSM::App::PERSISTENT_COOKIE_NAME]
+    assert rack_mock_session.cookie_jar.to_hash['language']
     page = Nokogiri::HTML(last_response.body)
     assert  page.css('input').find{|x| x.attributes['name'].value.eql?('state_id') }.attributes['value'].value
     state_id = page.css('input').find{|x| x.attributes['name'].value.eql?('state_id') }.attributes['value'].value.to_i
