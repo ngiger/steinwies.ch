@@ -1,8 +1,9 @@
-#\ -w -p 8004
-# 8004 is the port used to serve
+#\ -w -p 8006
+# 8006 is the port used to serve
 lib_dir = File.expand_path(File.join(File.dirname(__FILE__), 'src').untaint)
 $LOAD_PATH << lib_dir
 require 'util/config' # load config from etc/config.yml
+require 'steinwies'
 require 'util/app'
 require 'rack'
 require 'rack/static'
