@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+$: << File.expand_path('../src', File.dirname(__FILE__))
+$0 = 'SteinwiesTest'
+puts  File.expand_path('../src', File.dirname(__FILE__))
+require 'drb/drb'
+require 'steinwies'
+require 'util/config'
+$: << File.expand_path('..', File.dirname(__FILE__))
+puts File.expand_path('..', File.dirname(__FILE__))
+require 'spec/tst_util'
+require 'util/app'
+
+SBSM.info msg = "Starting #{Steinwies.config.server_uri}"
+puts msg
+DRb.start_service(Steinwies.config.server_uri, Steinwies::AppWebrick.new)
+DRb.thread.join

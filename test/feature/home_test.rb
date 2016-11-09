@@ -1,32 +1,32 @@
+#!/usr/bin/env ruby
+$:.unshift File.expand_path('..', File.dirname(__FILE__))
+require 'minitest/autorun'
 require 'test_helper'
+require 'nokogiri'
 
-# /de/page/home
-class HomeTest < Minitest::Test
-  include Steinwies::TestCase
-
-  def setup
-    browser.visit('/de/page/home')
+class SteinwiesTest <  Minitest::Test
+  def test_home_title
+    get '/de/page/home'
+    assert last_response.ok?
+    page = Nokogiri::HTML(last_response.body)
+    assert_match(/Praxis Steinwies/, page.title)
   end
-
-  def test_page_has_address_as_title
-    title = wait_until { browser.td(class: 'title') }
-    assert_match(/Steinwiesstr\.\s37/, title.text)
-  end
-
-  def test_page_has_valid_email_links
-    assert_match('/de/page/home', browser.url)
-
-    link = wait_until { browser.a(href: 'mailto:thea.altherr@bluewin.ch') }
-    assert(link.exists?)
-    link = wait_until { browser.a(href: 'mailto:Praxis.gut@hin.ch') }
-    assert(link.exists?)
-    link = wait_until { browser.a(href: 'mailto:daniel.marti@kispi.uzh.ch') }
-    assert(link.exists?)
-    link = wait_until { browser.a(href: 'mailto:barbara.menn@bluewin.ch') }
-    assert(link.exists?)
-    link = wait_until { browser.a(href: 'mailto:mmpopper@hotmail.com') }
-    assert(link.exists?)
-    link = wait_until { browser.a(href: 'mailto:maja.wyss@steinwies.ch') }
-    assert(link.exists?)
+  def test_home_mailto
+    addresses = [
+    'mailto:thea.altherr@bluewin.ch',
+    'mailto:Praxis.gut@hin.ch',
+    'mailto:daniel.marti@kispi.uzh.ch',
+    'mailto:barbara.menn@bluewin.ch',
+    'mailto:mmpopper@hotmail.com',
+    'mailto:maja.wyss@steinwies.ch',
+    ]
+    get '/de/page/home'
+    assert last_response.ok?
+    page = Nokogiri::HTML(last_response.body)
+    addresses.each do |addr|
+      found = page.css('a').find do |a|  CGI.unescapeHTML(a.attributes['href'].to_s).eql?(addr) end
+      assert found, "must find mailto #{addr}"
+    end
   end
 end
+
