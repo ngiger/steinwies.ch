@@ -47,7 +47,7 @@ end
 def setup_steinwies
   at_exit { stop_steinwies_and_browser }
   DRb.start_service(TEST_APP_URI.to_s, Steinwies::AppWebrick.new)
-  @pid = Process.spawn('bundle', 'exec', 'rackup', 'spec/config.ru', { :err => ['app_spec.log', 'w+'], :out => ['app_spec.log', 'a+']})
+  @pid = Process.spawn('bundle', 'exec', 'rackup', 'spec/config.ru', { :err => ['spec_error.log', 'w+']})
   SBSM.info msg =  "Starting #{Steinwies.config.server_uri} PID #{@pid}"
   puts msg
   sleep(0.1)
@@ -59,7 +59,7 @@ def stop_steinwies_and_browser
   ensure
     puts "stop_steinwies_and_browser ensure killing @pid: #{@pid}"
     if @pid
-      Process.kill("HUP", @pid)
+      Process.kill("QUIT", @pid)
       Process.wait(@pid)
     end
   end

@@ -1,19 +1,19 @@
-#!/usr/bin/env ruby
+#\ -w -p 8004
+# 8004 is the port used to serve
 lib_dir = File.expand_path(File.join(File.dirname(__FILE__), 'src').untaint)
 $LOAD_PATH << lib_dir
-require 'util/app'
 require 'util/config' # load config from etc/config.yml
+require 'util/app'
 require 'rack'
-require 'rack/show_exceptions'
-require 'webrick'
-name = File.basename(File.dirname(__FILE__))
 require 'rack/static'
-use(Rack::Static, urls: ["/doc/"])
-map '/doc' do
-  run Proc.new { |env| ['200', {'Content-Type' => 'text/html'}, ['first_post', 'second_post', 'third_post']] }
-end
-use Rack::ContentLength
-Rack::Server.start( :app => Rack::ShowExceptions.new(Rack::Lint.new(Steinwies::AppWebrick.new())),
-                    :Port => URI('http://'+Steinwies.config.server_name).port,
-                  )
+require 'rack/show_exceptions'
+require 'rack'
+require 'webrick'
 
+SBSM.logger= ChronoLogger.new(Steinwies.config.log_pattern)
+use Rack::CommonLogger, SBSM.logger
+use(Rack::Static, urls: ["/doc/"])
+use Rack::ContentLength
+SBSM.info "Starting Rack::Server Steinwies::AppWebrick.new with log_pattern #{Steinwies.config.log_pattern}"
+app = Rack::ShowExceptions.new(Rack::Lint.new(Steinwies::AppWebrick.new()))
+run app

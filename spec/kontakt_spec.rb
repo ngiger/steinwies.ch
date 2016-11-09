@@ -12,7 +12,7 @@ describe "steinwies.ch Homepage" do
     browser.goto SteinwiesUrl
   end
 
-  pending "should show the kontakt form" do
+  it "should show the kontakt form" do
     client = Selenium::WebDriver::Remote::Http::Default.new
     client.timeout = 8 # seconds – default is 60
     browser.goto SteinwiesUrl + '/de/page/kontakt'
@@ -27,16 +27,15 @@ describe "steinwies.ch Homepage" do
     browser.textarea(:name, 'text').set('Adding Some Text')
     confirm =  browser.button(:name => 'confirm')
     expect(confirm).not_to be_nil
-    if true
-      fail 'Dont push problematic button'
-    else
-      # here the browser hangs as it tries to connect to port 8004 which is for production. Not for testing
-      confirm.click
-      expect(browser.title).not_to match /Problem loading page/i
-      browser.button(:name => 'confirm').wait_until_present(5)
-      text = browser.text.clone
-      expect(text).to match(/Bitte schreiben Sie hier Ihren Feedbacktex/)
-    end
+    # here the browser hangs as it tries to connect to port 8004 which is for production. Not for testing
+    confirm.click
+    expect(browser.title).not_to match /Problem loading page/i
+    sendmail = browser.button(:name => 'sendmail')
+    sendmail.wait_until_present(5)
+    sendmail.click
+    text = browser.text.clone
+    expect(text).to match(/Ihre Nachricht wurde erfolgreich gesendet/)
+    # we cannot test here the Mail::TestMailer.deliveries, because we are running in a different process
   end
 
 end

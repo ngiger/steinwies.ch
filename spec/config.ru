@@ -6,6 +6,7 @@ $LOAD_PATH << File.dirname(lib_dir)
 require 'util/config'
 require 'spec/tst_util' # to override the DRB-port
 require 'util/app'
+use Rack::CommonLogger, ChronoLogger.new(TEST_CHRONO_LOGGER)
 use Rack::Reloader, 0
 use Rack::ContentLength
 use(Rack::Static, urls: ["/doc/"])

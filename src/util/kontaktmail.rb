@@ -1,8 +1,7 @@
 # KontaktMail -- Steinwies -- 04.12.2010 -- zdavatz@ywesee.com added sending through Google TLS lines 57-58
 # KontaktMail -- Steinwies -- 04.12.2002 -- benfay@ywesee.com
 
-require 'net/smtp'
-require 'util/smtp_tls'
+require 'mail'
 require 'util/config'
 require 'state/global_predefine'
 require 'view/kontakt'
@@ -12,6 +11,18 @@ module Steinwies
     attr_accessor :errors
     attr_reader :email, :anrede, :name, :vorname, :firma, :adresse, :ort,
                 :telefon, :bestell_diss, :bestell_pedi, :text
+    options = {
+        :address => Steinwies.config.mailer['server'],
+        :port => Steinwies.config.mailer['port'],
+        :domain => Steinwies.config.mailer['domain'],
+        :user_name => Steinwies.config.mailer['user'],
+        :password => Steinwies.config.mailer['pass'],
+        :authentication => Steinwies.config.mailer['auth'],
+        :enable_starttls_auto => true,
+      }
+    Mail.defaults do
+      delivery_method :smtp, options
+    end
 
     def initialize(session)
       @errors       = []
@@ -59,19 +70,17 @@ module Steinwies
     end
 
     def do_sendmail
-      smtp = Net::SMTP.new(Steinwies.config.mailer['server'])
-      smtp.start(
-        Steinwies.config.mailer['domain'],
-        Steinwies.config.mailer['user'],
-        Steinwies.config.mailer['pass'],
-        Steinwies.config.mailer['auth']
-      )
-      smtp.ready(@email, Steinwies.config.mailer['to']) {  |a|
-        a.write("Content-Type: text/plain; charset='UTF-8'\n")
-        a.write("Subject: Email von Deiner Webseite.\n")
-        a.write("\n")
-        a.write(body)
-      }
+      my_var = body
+      Mail.deliver do
+        to Steinwies.config.mailer['to'].join(',')
+        from Steinwies.config.mailer['from']
+        subject 'Email von Deiner Webseite.'
+        html_part do
+        content_type 'text/html; charset=UTF-8'
+          body my_var
+        end
+      end
+      SBSM.info "SentMail  #{body.size}"
     end
   end
 end

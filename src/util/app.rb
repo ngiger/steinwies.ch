@@ -14,7 +14,9 @@ module Steinwies
     SESSION = Session
     attr_reader :trans_handler, :validator, :drb_uri
     def initialize(persistence_layer=nil)
-      SBSM.info "Steinwies::AppWebrick.new"
+      SBSM.logger= ChronoLogger.new(Steinwies.config.log_pattern)
+      SBSM.info "Steinwies::AppWebrick.new with log_pattern #{Steinwies.config.log_pattern} #{SBSM.logger.level}"
+      SBSM.logger.level = :info
       @validator = Validator.new
       @trans_handler = TransHandler.instance
       @drb_uri = Steinwies.config.server_uri
