@@ -1,17 +1,7 @@
 source 'https://rubygems.org'
 
-if File.directory?('../sbsm')
-  # gem 'sbsm', :path => '../sbsm/test_old'
-  gem 'sbsm', :path => '../sbsm'
-else
-  gem 'sbsm', :git => 'https://github.com/ngiger/sbsm.git', :branch => 'rack'
-end
-
-if File.directory?('../htmlgrid')
-  gem 'htmlgrid', :path => '../htmlgrid'
-else
-  gem 'htmlgrid', '>= 1.1.3'
-end
+gem 'sbsm','>= 1.3.0'
+gem 'htmlgrid', '>= 1.1.3'
 
 gem 'rclconf',  '1.0.0'
 gem "passenger", ">= 5.0.25", require: "phusion_passenger/rack_handler"

@@ -1,14 +1,14 @@
 # steinwies.ch
 
-[steinwies.ch](http://steinwies.ch/)
+* [steinwies.ch](http://steinwies.ch/)
+* https://github.com/zdavatz/steinwies.ch (source)
 
 ## Setup
 
 ### Requirements
 
 * Ruby, `>= 2.3.1`
-* Apache2
-* [mod_ruby](https://github.com/shugo/mod_ruby) (It works with Ruby `1.8.6`)
+* Apache2 with a ProxyPass
 * cronolog (optional)
 * daemontools (for davazd, yusd)
 
@@ -44,53 +44,46 @@ And then, boot application server as `bundle exec ./bin/steinwies`.
 
 ### Dependencies
 
-* Ruby
-* Node.js
-
-* [minitest](https://github.com/seattlerb/minitest)
-* [Selenium](http://docs.seleniumhq.org/) (via [watir](https://github.com/watir/watir))
-* [PhantomJS](https://github.com/ariya/phantomjs)
-
+* Ruby (for the used gems see the Gemfile)
+* Selenium/Watir/geckodriver for spec test (see .travis.yml for setup)
 ### Setup
 
 ```zsh
 % git clone https://github.com/zdavatz/steinwies.ch.git
 % cd steinwies.ch
 
-: e.g. use nodeenv
-% pip install nodeenv
-% nodeenv --node=0.12.15 env
-% source env/bin/activate
-
-: install phantomjs
-(env) % npm install
-
-(env) % bundle install
-```
-
 ### How to run
 
 #### Test suite
 
-```zsh
-% bundle exec rake test
-```
+We have unit test which use rack-test
+
+`bundle exec rake test`
+
+And we have some spec test, which spawn the Steinwies Rack and DRB servers on port 11080 and 11081 for localhost.
+Then we execute some simple access.
+
+`bundle exec rake test`
 
 #### Single feature test
 
-```zsh
-: `DEBUG=true` is useful for debug (but it might be not interested)
-bundle exec foreman run ruby -I.:test test/feature/home_test.rb
-Run options: --seed 33427
+`bundle exec test/feature/kontakt_test.rb --name test_kontakt_submit_kontakt`
 
-# Running:
+Or for a single spec test:
 
-**
+`bundle exec rspec spec/homepage_spec.rb:25`
 
-Fabulous run in 3.490279s, 0.5730 runs/s, 3.7246 assertions/s.
+### Running:
 
-2 runs, 13 assertions, 0 failures, 0 errors, 0 skips
-```
+You must start the DRB server process and the Rack-Webserver in two seperate threads using
+
+* `bundle exec bin/steinwies`
+* `bundle exec rackup`
+
+## Open problems
+
+* Submitting the form does not work see test_kontakt_submit_kontakt
+* Combine logging of apache and running Ruby processes?
 
 ## License
 
