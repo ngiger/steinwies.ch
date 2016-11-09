@@ -33,7 +33,6 @@ module Steinwies
         value = items.shift
         values.store(key, value)
       end
-      puts "Steinwies simple_parse returns #{values} for #{uri}"
       values
     end
   end

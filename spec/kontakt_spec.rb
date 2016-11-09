@@ -27,11 +27,16 @@ describe "steinwies.ch Homepage" do
     browser.textarea(:name, 'text').set('Adding Some Text')
     confirm =  browser.button(:name => 'confirm')
     expect(confirm).not_to be_nil
-    confirm.click
-    expect(browser.title).not_to match /Problem loading page/i
-    browser.button(:name => 'confirm').wait_until_present(5)
-    text = browser.text.clone
-    expect(text).to match(/Bitte schreiben Sie hier Ihren Feedbacktex/)
+    if true
+      fail 'Dont push problematic button'
+    else
+      # here the browser hangs as it tries to connect to port 8004 which is for production. Not for testing
+      confirm.click
+      expect(browser.title).not_to match /Problem loading page/i
+      browser.button(:name => 'confirm').wait_until_present(5)
+      text = browser.text.clone
+      expect(text).to match(/Bitte schreiben Sie hier Ihren Feedbacktex/)
+    end
   end
 
 end

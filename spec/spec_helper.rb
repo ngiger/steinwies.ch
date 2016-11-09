@@ -54,15 +54,16 @@ def setup_steinwies
 end
 
 def stop_steinwies_and_browser
-  puts "stop_steinwies_and_browser @pid: #{@pid} browser #{browser}"
-  $browser.close if $browser
-  puts "stop_steinwies_and_browser after closing browser #{browser}"
-ensure
-  puts "stop_steinwies_and_browser ensure killing @pid: #{@pid}"
-  if @pid
-    Process.kill("HUP", @pid)
-    Process.wait(@pid)
+  begin
+    puts "stop_steinwies_and_browser @pid: #{@pid} browser #{@driver ? $browser : 'went away'}"
+  ensure
+    puts "stop_steinwies_and_browser ensure killing @pid: #{@pid}"
+    if @pid
+      Process.kill("HUP", @pid)
+      Process.wait(@pid)
+    end
   end
+  $browser.close if @driver && $browser
 end
 
 def setup_browser
@@ -78,8 +79,8 @@ def setup_browser
     bin_path = '/usr/bin/firefox-bin'
     Selenium::WebDriver::Firefox::Binary.path= bin_path if File.executable?(bin_path)
     caps = Selenium::WebDriver::Remote::Capabilities.firefox(marionette: true)
-    driver = Selenium::WebDriver.for :firefox
-    $browser = Watir::Browser.new driver, desired_capabilities: caps
+    @driver = Selenium::WebDriver.for :firefox
+    $browser = Watir::Browser.new @driver, desired_capabilities: caps
   elsif Browser2test[0].to_s.eql?('chrome')
     prefs = {
       :download => {:prompt_for_download => false, }

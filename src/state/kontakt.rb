@@ -9,15 +9,11 @@ module Steinwies
     DIRECT_EVENT = :kontakt
     VIEW         = Kontakt
 
-    def initialize(session, model)
-      super(session, model)
-    end
     def confirm
       mail = KontaktMail.new(@session)
       if mail.ready?
         ConfirmState.new(@session, mail)
       else
-        puts "Pushed error"
         mail.errors.push(:email)
         @model = mail
         self
