@@ -11,42 +11,10 @@ $: << test unless $:.include?(test)
 require 'minitest'
 require 'minitest/autorun'
 require 'minitest/pride'
-require 'watir'
-require 'rclconf'
-require 'steinwies'
 require 'util/config'
-
-# debugging
-DEBUG    = (ENV['DEBUG'] == 'true' || false)
-DEBUGGER = ENV['DEBUGGER'] \
-  if ENV.has_key?('DEBUGGER') && !ENV['DEBUGGER'].empty?
-TEST_CLIENT_TIMEOUT = 5 # seconds
-
-TEST_SRV_URI = URI.parse(ENV['TEST_SRV_URL'] || 'http://127.0.0.1:11080')
-TEST_APP_URI = URI.parse(ENV['TEST_APP_URL'] || 'druby://127.0.0.1:11081')
-
-require 'watir-webdriver/wait'
-module WaitUntil
-  def wait_until(&block)
-    raise ArgumentError unless block_given?
-    Watir::Wait.until {
-      block.call.wait_until_present
-    }
-    block.call
-  end
-end
-
-module Steinwies::TestCase
-  include WaitUntil
-end
-
-Watir.driver = :webdriver
-Watir.load_driver
-Watir.default_timeout = TEST_CLIENT_TIMEOUT
-
-Steinwies.config.document_root = root_dir.join('doc').to_s
-Steinwies.config.environment   = 'test'
-
+# Overriding ports and log destination
+$: << root_dir.join('spec').to_s
+require 'tst_util'
 require 'util/app'
 require 'rack/test'
 
