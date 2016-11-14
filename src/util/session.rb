@@ -7,7 +7,7 @@ require 'state/states'
 
 module Steinwies
   class Session < SBSM::Session
-    SERVER_NAME      = Steinwies.config.server_name + ':' + Steinwies.config.server_port.to_s
+    SERVER_NAME      = Steinwies.config.server_name
     DEFAULT_LANGUAGE = 'de'
     DEFAULT_STATE    = HomeState
     DEFAULT_ZONE     = 'page'

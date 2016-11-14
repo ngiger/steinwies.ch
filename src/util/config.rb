@@ -10,7 +10,6 @@ module Steinwies
     'server_uri' => 'druby://localhost:10001',
     'log_pattern' => File.join(Dir.pwd, 'log','/%Y/%m/%d/steinwies_log'),
     'server_name' => 'localhost',
-    'server_port' => '7777',
     # smtp
     :mailer => {
       :from   => '"Steinwies" <steinwies@example.org>',
