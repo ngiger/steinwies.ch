@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'sbsm','>= 1.3.2'
+gem 'sbsm','>= 1.3.3'
 gem 'htmlgrid', '>= 1.1.3'
 gem 'mail'
 
